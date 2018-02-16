@@ -1,0 +1,112 @@
+/**
+ * Created by Sawyer Clever
+ * For use with JavaCC
+ * Date: 11/12/17
+ **/
+
+options
+{
+	LOOKAHEAD=2;
+}
+
+PARSER_BEGIN(calc)
+
+package main;
+
+public class calc
+{ 
+}
+
+PARSER_END(calc)
+
+SKIP:
+{
+    " "
+|   "\r"
+|   "\t"
+|   "\n"
+}
+
+TOKEN:
+{
+  	<NUM:(<INT>)+(<DEC>(<INT>)+)?>
+|   <DEC:(".")>
+|   <INT:(["0"-"9"])>
+|   <LFT:("(")>
+|   <RGT:(")")>
+|   <POW:("^")>
+|   <MUL:("*")>
+|   <DIV:("/")>
+|   <ADD:("+")>
+|   <SUB:("-")>
+}
+
+double parse():
+{
+    double a;
+}
+{
+	a=expr()
+	{ return a; }
+}
+
+double expr():
+{
+    double a;
+    double b;
+}
+{
+    a=term()
+    (
+        <ADD> b=expr() { a+=b; }
+    |   <SUB> b=expr() { a-=b; }
+    )*
+    { return a; }
+}
+
+double term():
+{
+    double a;
+    double b;
+}
+{
+    a=fac()
+    (
+        <MUL> b=term() { a*=b; }
+    |   <DIV> b=term() { a/=b; }
+    )*
+    { return a; }
+}
+
+double fac():
+{
+    double a;
+    double b;
+}
+{
+    a=com()
+    (
+        <POW> b=fac() { a=Math.pow(a,b); }
+    )*
+    { return a; }
+}
+
+double com():
+{
+    double a;
+}
+{
+     <SUB> a=ele() { return -a; }
+|          a=ele() { return a; }
+}
+
+double ele():
+{
+    Token t;
+    double a;
+    double b;
+}
+{
+    t=<NUM> { return Double.parseDouble(t.toString()); }
+|   <LFT> a=expr() <RGT> { return a; }
+}
