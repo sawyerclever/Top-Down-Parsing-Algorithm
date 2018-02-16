@@ -29,7 +29,7 @@ SKIP:
 
 TOKEN:
 {
-  	<NUM:(<INT>)+(<DEC>(<INT>)+)?>
+    <NUM:(<INT>)+(<DEC>(<INT>)+)?>
 |   <DEC:(".")>
 |   <INT:(["0"-"9"])>
 |   <LFT:("(")>
@@ -43,7 +43,7 @@ TOKEN:
 
 double parse():
 {
-    double a;
+	double a;
 }
 {
 	a=expr()
